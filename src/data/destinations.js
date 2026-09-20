@@ -71,6 +71,78 @@ const destinations = [
     rating: 4.6,
     popular: false,
   },
+  {
+    id: 7,
+    name: "Amalfi Coast",
+    country: "Italy",
+    category: "Beach",
+    description:
+      "Enjoy dramatic coastal cliffs, colorful villages, delicious food, and Mediterranean views.",
+    image:
+      "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.8,
+    popular: false,
+  },
+  {
+    id: 8,
+    name: "Reykjavik",
+    country: "Iceland",
+    category: "Adventure",
+    description:
+      "Explore glaciers, waterfalls, volcanic landscapes, and the incredible Northern Lights.",
+    image:
+      "https://images.unsplash.com/photo-1520769669658-f07657f5a307?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.7,
+    popular: false,
+  },
+  {
+    id: 9,
+    name: "Marrakech",
+    country: "Morocco",
+    category: "Culture",
+    description:
+      "Discover colorful markets, historic architecture, traditional cuisine, and Moroccan culture.",
+    image:
+      "https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.6,
+    popular: false,
+  },
+  {
+    id: 10,
+    name: "New York City",
+    country: "United States",
+    category: "City",
+    description:
+      "Experience iconic skyscrapers, world-famous neighborhoods, entertainment, and diverse cuisine.",
+    image:
+      "https://images.unsplash.com/photo-1496588152823-86ff7695e68f?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.7,
+    popular: false,
+  },
+  {
+    id: 11,
+    name: "Queenstown",
+    country: "New Zealand",
+    category: "Adventure",
+    description:
+      "Take on thrilling outdoor adventures surrounded by mountains, lakes, and stunning landscapes.",
+    image:
+      "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.9,
+    popular: false,
+  },
+  {
+    id: 12,
+    name: "Maldives",
+    country: "Maldives",
+    category: "Beach",
+    description:
+      "Relax in crystal-clear waters, beautiful resorts, and peaceful tropical surroundings.",
+    image:
+      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.9,
+    popular: false,
+  },
 ];
 
 export default destinations;
