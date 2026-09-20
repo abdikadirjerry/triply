@@ -1,7 +1,12 @@
+import { Link } from "react-router-dom";
+
 function DestinationCard({ destination }) {
   return (
     <article className="destination-card">
-      <div className="destination-card__image-wrapper">
+      <Link
+        to={`/destinations/${destination.slug}`}
+        className="destination-card__image-wrapper"
+      >
         <img
           className="destination-card__image"
           src={destination.image}
@@ -11,7 +16,7 @@ function DestinationCard({ destination }) {
         <span className="destination-card__category">
           {destination.category}
         </span>
-      </div>
+      </Link>
 
       <div className="destination-card__content">
         <div className="destination-card__heading">
@@ -30,9 +35,12 @@ function DestinationCard({ destination }) {
           {destination.description}
         </p>
 
-        <button type="button" className="destination-card__link">
+        <Link
+          to={`/destinations/${destination.slug}`}
+          className="destination-card__link"
+        >
           Explore destination →
-        </button>
+        </Link>
       </div>
     </article>
   );
