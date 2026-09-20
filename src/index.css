@@ -1,199 +1,103 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* Hero */
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  background-color: #f8fafc;
-  color: #1f2937;
-  line-height: 1.6;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.app__content {
-  flex: 1;
-}
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Navbar */
-
-.navbar {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.navbar__inner {
-  min-height: 72px;
+.hero {
+  min-height: 620px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.navbar__logo {
-  font-size: 28px;
-  font-weight: 800;
-  color: #0f766e;
-  letter-spacing: -1px;
-}
-
-.navbar__links {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-.navbar__link {
-  color: #64748b;
-  font-size: 15px;
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.navbar__link:hover {
-  color: #0f766e;
-}
-
-.navbar__link--active {
-  color: #0f766e;
-}
-
-/* Page placeholders */
-
-.page-placeholder {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 100px 24px;
-  text-align: center;
-}
-
-.page-placeholder h1 {
-  margin-bottom: 12px;
-  font-size: 42px;
-  line-height: 1.2;
-  color: #111827;
-}
-
-.page-placeholder p {
-  color: #64748b;
-  font-size: 18px;
-}
-
-/* Footer */
-
-.footer {
-  margin-top: auto;
-  background-color: #111827;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(15, 23, 42, 0.9) 0%,
+      rgba(15, 23, 42, 0.7) 45%,
+      rgba(15, 23, 42, 0.25) 100%
+    ),
+    url("https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=85")
+      center / cover no-repeat;
   color: #ffffff;
 }
 
-.footer__inner {
-  min-height: 220px;
-  padding-top: 48px;
-  padding-bottom: 48px;
+.hero__content {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.hero__text {
+  max-width: 760px;
+}
+
+.hero__eyebrow {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #99f6e4;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.hero__title {
+  margin-bottom: 24px;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -2px;
+}
+
+.hero__description {
+  max-width: 650px;
+  margin-bottom: 36px;
+  color: #e2e8f0;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero__search {
+  max-width: 680px;
+  padding: 8px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 32px;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border-radius: 12px;
 }
 
-.footer__logo {
-  margin-bottom: 8px;
-  font-size: 24px;
+.hero__search-field {
+  flex: 1;
+  padding: 8px 16px;
 }
 
-.footer__description {
-  max-width: 420px;
-  color: #9ca3af;
+.hero__search-field label {
+  display: block;
+  margin-bottom: 2px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hero__search-field input {
+  width: 100%;
+  border: none;
+  outline: none;
+  color: #1f2937;
   font-size: 15px;
 }
 
-.footer__copyright {
-  padding-top: 24px;
-  border-top: 1px solid #374151;
-  color: #9ca3af;
-  font-size: 14px;
+.hero__search-field input::placeholder {
+  color: #94a3b8;
 }
 
-/* Responsive */
+.hero__search-button {
+  min-height: 52px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0f766e;
+  color: #ffffff;
+  font-weight: 700;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
 
-@media (max-width: 768px) {
-  .navbar__inner {
-    min-height: auto;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .navbar__links {
-    width: 100%;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .navbar__link {
-    font-size: 14px;
-  }
-
-  .page-placeholder {
-    padding-top: 72px;
-    padding-bottom: 72px;
-  }
-
-  .page-placeholder h1 {
-    font-size: 32px;
-  }
-
-  .page-placeholder p {
-    font-size: 16px;
-  }
+.hero__search-button:hover {
+  background-color: #115e59;
+  transform: translateY(-1px);
 }
