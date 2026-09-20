@@ -197,7 +197,54 @@ img {
     font-size: 16px;
   }
 
-  
+  .section {
+    padding: 72px 0;
+  }
+
+  .section__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section__title {
+    font-size: 32px;
+  }
+
+  .destination-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    min-height: 680px;
+  }
+
+  .hero__title {
+    font-size: 40px;
+    letter-spacing: -1px;
+  }
+
+  .hero__description {
+    font-size: 16px;
+  }
+
+  .hero__search {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hero__search-field {
+    padding: 12px 16px;
+  }
+
+  .hero__search-button {
+    width: 100%;
+  }
+
+  .destination-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Hero */
