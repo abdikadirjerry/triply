@@ -5,7 +5,19 @@ const TripsContext = createContext();
 const TRIPS_STORAGE_KEY = "triply-trips";
 
 export function TripsProvider({ children }) {
-  const [trips, setTrips] = useState([]);
+  const [trips, setTrips] = useState(() => {
+    try {
+      const savedTrips = localStorage.getItem(TRIPS_STORAGE_KEY);
+
+      return savedTrips ? JSON.parse(savedTrips) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(trips));
+  }, [trips]);
 
   const addTrip = (trip) => {
     setTrips((currentTrips) => [
