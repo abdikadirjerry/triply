@@ -1,147 +1,201 @@
-import { useState } from "react";
-import DestinationCard from "../components/destinations/DestinationCard";
+import { Link, useParams } from "react-router-dom";
 import destinations from "../data/destinations";
+import { useFavorites } from "../context/FavoritesContext";
+import { useTrips } from "../context/TripsContext";
 
-function Destinations() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("All");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+function DestinationDetails() {
+  const { slug } = useParams();
 
-  const countries = [
-    "All",
-    ...new Set(destinations.map((destination) => destination.country)),
-  ];
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { trips, addDestinationToTrip } = useTrips();
 
-  const categories = [
-    "All",
-    ...new Set(destinations.map((destination) => destination.category)),
-  ];
+  const destination = destinations.find((item) => item.slug === slug);
 
-  const filteredDestinations = destinations.filter((destination) => {
-    const matchesSearch =
-      destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      destination.country.toLowerCase().includes(searchTerm.toLowerCase());
+  if (!destination) {
+    return (
+      <main className="destination-not-found">
+        <div className="container">
+          <div className="destination-not-found__content">
+            <span className="destination-not-found__icon">🌍</span>
 
-    const matchesCountry =
-      selectedCountry === "All" || destination.country === selectedCountry;
+            <h1>Destination not found</h1>
 
-    const matchesCategory =
-      selectedCategory === "All" || destination.category === selectedCategory;
+            <p>We couldn't find the destination you're looking for.</p>
 
-    return matchesSearch && matchesCountry && matchesCategory;
-  });
+            <Link to="/destinations">Back to destinations</Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  const favorite = isFavorite(destination.id);
+
+  const handleFavoriteClick = () => {
+    toggleFavorite(destination.id);
+  };
+
+  const handleAddToTrip = (tripId) => {
+    addDestinationToTrip(tripId, destination.id);
+  };
 
   return (
     <main>
-      <section className="destinations-header">
-        <div className="container">
-          <span className="section__eyebrow">EXPLORE THE WORLD</span>
+      <section className="destination-detail-hero">
+        <img
+          className="destination-detail-hero__image"
+          src={destination.image}
+          alt={destination.name}
+        />
 
-          <h1 className="destinations-header__title">
-            Find your next destination
-          </h1>
+        <div className="destination-detail-hero__overlay">
+          <div className="container destination-detail-hero__content">
+            <Link to="/destinations" className="destination-detail-hero__back">
+              ← Back to destinations
+            </Link>
 
-          <p className="destinations-header__description">
-            Discover beautiful places, exciting experiences, and destinations
-            worth adding to your next adventure.
-          </p>
+            <div className="destination-detail-hero__info">
+              <span className="destination-detail-hero__category">
+                {destination.category}
+              </span>
+
+              <h1>{destination.name}</h1>
+
+              <p>
+                {destination.country} · ★ {destination.rating}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className={`destination-detail-hero__favorite ${
+                favorite ? "destination-detail-hero__favorite--active" : ""
+              }`}
+              onClick={handleFavoriteClick}
+            >
+              <span>{favorite ? "♥" : "♡"}</span>
+
+              {favorite ? "Saved to favorites" : "Add to favorites"}
+            </button>
+          </div>
         </div>
       </section>
 
-      <section className="destinations-section">
+      <section className="destination-detail-section">
         <div className="container">
-          <div className="destination-filters">
-            <div className="destination-search">
-              <label htmlFor="destination-search">Search destinations</label>
+          <div className="destination-detail-layout">
+            <div className="destination-detail-main">
+              <div className="destination-detail-intro">
+                <span className="section__eyebrow">
+                  DISCOVER {destination.name.toUpperCase()}
+                </span>
 
-              <input
-                id="destination-search"
-                type="text"
-                placeholder="Search by destination or country..."
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-              />
+                <h2>About {destination.name}</h2>
+
+                <p>{destination.description}</p>
+              </div>
+
+              <div className="destination-detail-content">
+                <h2>Things to do</h2>
+
+                <div className="detail-list">
+                  {destination.activities.map((activity) => (
+                    <div className="detail-list__item" key={activity}>
+                      <span className="detail-list__icon">✓</span>
+
+                      <span>{activity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="destination-detail-content">
+                <h2>Places to visit</h2>
+
+                <div className="places-grid">
+                  {destination.places.map((place) => (
+                    <div className="place-card" key={place}>
+                      <span className="place-card__icon">📍</span>
+
+                      <span>{place}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <div className="destination-filter">
-              <label htmlFor="country-filter">Country</label>
+            <aside className="travel-info">
+              <div className="travel-info__header">
+                <span className="section__eyebrow">TRAVEL GUIDE</span>
 
-              <select
-                id="country-filter"
-                value={selectedCountry}
-                onChange={(event) => setSelectedCountry(event.target.value)}
-              >
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <h2>Travel information</h2>
+              </div>
 
-            <div className="destination-filter">
-              <label htmlFor="category-filter">Category</label>
+              <div className="travel-info__items">
+                <div className="travel-info__item">
+                  <span className="travel-info__label">Best time</span>
 
-              <select
-                id="category-filter"
-                value={selectedCategory}
-                onChange={(event) => setSelectedCategory(event.target.value)}
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
+                  <strong>{destination.bestTime}</strong>
+                </div>
+
+                <div className="travel-info__item">
+                  <span className="travel-info__label">Language</span>
+
+                  <strong>{destination.language}</strong>
+                </div>
+
+                <div className="travel-info__item">
+                  <span className="travel-info__label">Currency</span>
+
+                  <strong>{destination.currency}</strong>
+                </div>
+
+                <div className="travel-info__item">
+                  <span className="travel-info__label">Average budget</span>
+
+                  <strong>{destination.budget}</strong>
+                </div>
+              </div>
+
+              {trips.length > 0 ? (
+                <div className="trip-selector">
+                  <h3>Add to a trip</h3>
+
+                  <div className="trip-selector__list">
+                    {trips.map((trip) => {
+                      const alreadyAdded = trip.destinations.includes(
+                        destination.id,
+                      );
+
+                      return (
+                        <button
+                          type="button"
+                          className={`trip-selector__item ${
+                            alreadyAdded ? "trip-selector__item--added" : ""
+                          }`}
+                          key={trip.id}
+                          onClick={() => handleAddToTrip(trip.id)}
+                          disabled={alreadyAdded}
+                        >
+                          <span>{alreadyAdded ? "✓" : "+"}</span>
+
+                          <span>{trip.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <Link to="/trips" className="travel-info__button">
+                  Create a trip first
+                </Link>
+              )}
+            </aside>
           </div>
-
-          <div className="destinations-results-header">
-            <div>
-              <h2>Explore destinations</h2>
-
-              <p>
-                Showing {filteredDestinations.length}{" "}
-                {filteredDestinations.length === 1
-                  ? "destination"
-                  : "destinations"}
-              </p>
-            </div>
-          </div>
-
-          {filteredDestinations.length > 0 ? (
-            <div className="destination-grid">
-              {filteredDestinations.map((destination) => (
-                <DestinationCard
-                  key={destination.id}
-                  destination={destination}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="destination-empty">
-              <div className="destination-empty__icon">🌍</div>
-
-              <h2>No destinations found</h2>
-
-              <p>Try changing your search or selecting different filters.</p>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedCountry("All");
-                  setSelectedCategory("All");
-                }}
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
         </div>
       </section>
     </main>
   );
 }
 
-export default Destinations;
+export default DestinationDetails;
