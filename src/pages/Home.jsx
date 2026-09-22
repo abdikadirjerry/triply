@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import destinations from "../data/destinations";
 import DestinationCard from "../components/destinations/DestinationCard";
 import { useTrips } from "../context/TripsContext";
+import { useFavorites } from "../context/FavoritesContext";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { trips } = useTrips();
+  const { favoriteIds } = useFavorites();
 
   const searchResults = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -140,20 +142,17 @@ function Home() {
           <div className="home-popular__stats">
             <div className="home-popular__stat">
               <strong>{popularDestinations.length}</strong>
-
               <span>Popular destinations</span>
             </div>
 
             <div className="home-popular__stat">
               <strong>{destinations.length}</strong>
-
               <span>Destinations to explore</span>
             </div>
 
             <div className="home-popular__stat">
-              <strong>4.8</strong>
-
-              <span>Average traveler rating</span>
+              <strong>{favoriteIds.length}</strong>
+              <span>Destinations saved</span>
             </div>
           </div>
 
@@ -224,6 +223,29 @@ function Home() {
               </Link>
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="home-final-cta">
+        <div className="container">
+          <div className="home-final-cta__content">
+            <span className="section__eyebrow">KEEP EXPLORING</span>
+
+            <h2>Your next destination is waiting.</h2>
+
+            <p>Browse the full Triply collection and discover somewhere new.</p>
+
+            <div className="home-final-cta__actions">
+              <Link to="/destinations" className="home-final-cta__primary">
+                Explore destinations
+              </Link>
+
+              <Link to="/favorites" className="home-final-cta__secondary">
+                View favorites
+                {favoriteIds.length > 0 && ` (${favoriteIds.length})`}
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </main>
