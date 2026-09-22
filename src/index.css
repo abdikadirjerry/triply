@@ -1573,3 +1573,70 @@ img {
     grid-column: auto;
   }
 }
+
+/* ========================================
+   TRIP DESTINATION SELECTOR
+======================================== */
+
+.trip-selector {
+  margin-top: 1.5rem;
+}
+
+.trip-selector h3 {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.trip-selector__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.trip-selector__item {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #334155;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.trip-selector__item:hover:not(:disabled) {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.trip-selector__item span:first-child {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.trip-selector__item--added {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+  cursor: default;
+}
+
+.trip-selector__item--added span:first-child {
+  background: #dcfce7;
+  color: #16a34a;
+}
