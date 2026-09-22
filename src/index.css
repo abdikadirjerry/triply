@@ -2343,3 +2343,35 @@ img {
     width: 100%;
   }
 }
+
+/* ========================================
+   HOME SECTION POLISH
+======================================== */
+
+.home-popular,
+.home-trips {
+  position: relative;
+}
+
+.home-popular {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.home-trips {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.section__link {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .home-popular,
+  .home-trips {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
