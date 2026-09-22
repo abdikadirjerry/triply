@@ -4,7 +4,7 @@ import { useTrips } from "../context/TripsContext";
 import destinations from "../data/destinations";
 
 function MyTrips() {
-  const { trips, addTrip, removeDestinationFromTrip } = useTrips();
+  const { trips, addTrip, deleteTrip, removeDestinationFromTrip } = useTrips();
 
   const [tripName, setTripName] = useState("");
   const [tripDate, setTripDate] = useState("");
@@ -127,10 +127,20 @@ function MyTrips() {
                           <p>📅 {formatDate(trip.date)}</p>
                         </div>
 
-                        <span className="trip-card__count">
-                          {tripDestinations.length}{" "}
-                          {tripDestinations.length === 1 ? "place" : "places"}
-                        </span>
+                        <div className="trip-card__actions">
+                          <span className="trip-card__count">
+                            {tripDestinations.length}{" "}
+                            {tripDestinations.length === 1 ? "place" : "places"}
+                          </span>
+
+                          <button
+                            type="button"
+                            className="trip-card__delete"
+                            onClick={() => deleteTrip(trip.id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
 
                       {tripDestinations.length > 0 ? (
