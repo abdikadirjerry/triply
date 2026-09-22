@@ -2,9 +2,12 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import destinations from "../data/destinations";
 import DestinationCard from "../components/destinations/DestinationCard";
+import { useTrips } from "../context/TripsContext";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { trips } = useTrips();
 
   const searchResults = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -26,6 +29,8 @@ function Home() {
   const popularDestinations = destinations.filter(
     (destination) => destination.popular,
   );
+
+  const featuredTrips = trips.slice(0, 3);
 
   return (
     <main>
@@ -157,6 +162,68 @@ function Home() {
               <DestinationCard key={destination.id} destination={destination} />
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="section home-trips">
+        <div className="container">
+          <div className="section__header">
+            <div>
+              <span className="section__eyebrow">YOUR TRIPS</span>
+
+              <h2>Plan your next adventure</h2>
+
+              <p>
+                Keep your travel plans organized and ready for your next
+                journey.
+              </p>
+            </div>
+
+            <Link to="/trips" className="section__link">
+              Manage my trips →
+            </Link>
+          </div>
+
+          {featuredTrips.length > 0 ? (
+            <div className="home-trips__grid">
+              {featuredTrips.map((trip) => (
+                <Link to="/trips" className="home-trip-card" key={trip.id}>
+                  <div className="home-trip-card__icon">🧳</div>
+
+                  <div className="home-trip-card__content">
+                    <span>TRIP</span>
+
+                    <h3>{trip.name}</h3>
+
+                    <p>
+                      {trip.destinations.length}{" "}
+                      {trip.destinations.length === 1
+                        ? "destination"
+                        : "destinations"}
+                    </p>
+                  </div>
+
+                  <span className="home-trip-card__arrow">→</span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="home-trips__empty">
+              <div className="home-trips__empty-icon">🧳</div>
+
+              <div>
+                <h3>You don't have any trips yet</h3>
+
+                <p>
+                  Create your first trip and start planning your next adventure.
+                </p>
+              </div>
+
+              <Link to="/trips" className="home-trips__button">
+                Create a trip
+              </Link>
+            </div>
+          )}
         </div>
       </section>
     </main>

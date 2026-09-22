@@ -2113,3 +2113,147 @@ img {
     border-left: none;
   }
 }
+
+/* ========================================
+   HOME TRIPS
+======================================== */
+
+.home-trips {
+  background: #f8fafc;
+}
+
+.home-trips__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.home-trip-card {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.home-trip-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+.home-trip-card__icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #eff6ff;
+  font-size: 1.5rem;
+}
+
+.home-trip-card__content {
+  min-width: 0;
+  flex: 1;
+}
+
+.home-trip-card__content > span {
+  color: #2563eb;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.home-trip-card__content h3 {
+  margin: 0.25rem 0;
+  overflow: hidden;
+  color: #0f172a;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-trip-card__content p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.home-trip-card__arrow {
+  color: #2563eb;
+  font-size: 1.2rem;
+}
+
+.home-trips__empty {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.home-trips__empty-icon {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #eff6ff;
+  font-size: 1.8rem;
+}
+
+.home-trips__empty h3 {
+  margin: 0 0 0.4rem;
+  color: #0f172a;
+}
+
+.home-trips__empty p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.home-trips__button {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 9px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-trips__button:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 900px) {
+  .home-trips__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-trips__empty {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-trips__button {
+    margin-left: 0;
+  }
+}
