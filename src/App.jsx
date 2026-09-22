@@ -1,59 +1,42 @@
-import { createContext, useContext, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import Home from "./pages/Home";
+import Destinations from "./pages/Destinations";
+import MyTrips from "./pages/MyTrips";
+import Favorites from "./pages/Favorites";
+import DestinationDetails from "./pages/DestinationDetails";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
-const FavoritesContext = createContext();
-
-export function FavoritesProvider({ children }) {
-  const [favoriteIds, setFavoriteIds] = useState([]);
-
-  const isFavorite = (destinationId) => {
-    return favoriteIds.includes(destinationId);
-  };
-
-  const addFavorite = (destinationId) => {
-    setFavoriteIds((currentFavorites) => {
-      if (currentFavorites.includes(destinationId)) {
-        return currentFavorites;
-      }
-
-      return [...currentFavorites, destinationId];
-    });
-  };
-
-  const removeFavorite = (destinationId) => {
-    setFavoriteIds((currentFavorites) =>
-      currentFavorites.filter((id) => id !== destinationId),
-    );
-  };
-
-  const toggleFavorite = (destinationId) => {
-    if (isFavorite(destinationId)) {
-      removeFavorite(destinationId);
-    } else {
-      addFavorite(destinationId);
-    }
-  };
-
-  const value = {
-    favoriteIds,
-    isFavorite,
-    addFavorite,
-    removeFavorite,
-    toggleFavorite,
-  };
-
+function App() {
   return (
-    <FavoritesContext.Provider value={value}>
-      {children}
-    </FavoritesContext.Provider>
+    <BrowserRouter>
+      <FavoritesProvider>
+        <div className="app">
+          <Navbar />
+
+          <div className="app__content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+
+              <Route path="/destinations" element={<Destinations />} />
+
+              <Route
+                path="/destinations/:slug"
+                element={<DestinationDetails />}
+              />
+
+              <Route path="/trips" element={<MyTrips />} />
+
+              <Route path="/favorites" element={<Favorites />} />
+            </Routes>
+          </div>
+
+          <Footer />
+        </div>
+      </FavoritesProvider>
+    </BrowserRouter>
   );
 }
 
-export function useFavorites() {
-  const context = useContext(FavoritesContext);
-
-  if (!context) {
-    throw new Error("useFavorites must be used inside a FavoritesProvider");
-  }
-
-  return context;
-}
+export default App;
