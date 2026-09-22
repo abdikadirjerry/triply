@@ -2375,3 +2375,38 @@ img {
     padding-bottom: 4rem;
   }
 }
+
+/* ========================================
+   HOME FINAL POLISH
+======================================== */
+
+.home-search__result,
+.home-trip-card,
+.home-final-cta__primary,
+.home-final-cta__secondary,
+.home-trips__button {
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.home-search__result:hover {
+  transform: translateX(2px);
+}
+
+.home-final-cta__primary:hover,
+.home-final-cta__secondary:hover,
+.home-trips__button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .home-search__input-wrapper input {
+    min-height: 52px;
+  }
+
+  .home-search__button {
+    min-height: 52px;
+  }
+}
