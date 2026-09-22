@@ -1,22 +1,48 @@
 import { Link } from "react-router-dom";
+import { useFavorites } from "../../context/FavoritesContext";
 
 function DestinationCard({ destination }) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
+  const favorite = isFavorite(destination.id);
+
+  const handleFavoriteClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    toggleFavorite(destination.id);
+  };
+
   return (
     <article className="destination-card">
-      <Link
-        to={`/destinations/${destination.slug}`}
-        className="destination-card__image-wrapper"
-      >
-        <img
-          className="destination-card__image"
-          src={destination.image}
-          alt={destination.name}
-        />
+      <div className="destination-card__image-wrapper">
+        <Link to={`/destinations/${destination.slug}`}>
+          <img
+            className="destination-card__image"
+            src={destination.image}
+            alt={destination.name}
+          />
+        </Link>
 
         <span className="destination-card__category">
           {destination.category}
         </span>
-      </Link>
+
+        <button
+          type="button"
+          className={`destination-card__favorite ${
+            favorite ? "destination-card__favorite--active" : ""
+          }`}
+          onClick={handleFavoriteClick}
+          aria-label={
+            favorite
+              ? `Remove ${destination.name} from favorites`
+              : `Add ${destination.name} to favorites`
+          }
+        >
+          {favorite ? "♥" : "♡"}
+        </button>
+      </div>
 
       <div className="destination-card__content">
         <div className="destination-card__heading">
