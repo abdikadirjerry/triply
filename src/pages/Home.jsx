@@ -1,118 +1,140 @@
-import DestinationCard from "../components/destinations/DestinationCard";
+import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import destinations from "../data/destinations";
-import featuredTrips from "../data/trips";
+import DestinationCard from "../components/destinations/DestinationCard";
 
 function Home() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const searchResults = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+
+    if (!query) {
+      return [];
+    }
+
+    return destinations
+      .filter(
+        (destination) =>
+          destination.name.toLowerCase().includes(query) ||
+          destination.country.toLowerCase().includes(query) ||
+          destination.category.toLowerCase().includes(query),
+      )
+      .slice(0, 4);
+  }, [searchTerm]);
+
   const popularDestinations = destinations.filter(
     (destination) => destination.popular,
   );
 
   return (
     <main>
-      <section className="hero">
-        <div className="container hero__content">
-          <div className="hero__text">
-            <span className="hero__eyebrow">
-              YOUR NEXT ADVENTURE STARTS HERE
-            </span>
+      <section className="home-hero">
+        <div className="home-hero__background" />
 
-            <h1 className="hero__title">
-              Explore the world.
-              <br />
-              Create unforgettable memories.
-            </h1>
+        <div className="container home-hero__content">
+          <span className="section__eyebrow home-hero__eyebrow">
+            DISCOVER YOUR NEXT ADVENTURE
+          </span>
 
-            <p className="hero__description">
-              Discover inspiring destinations, plan your perfect trip, and turn
-              your travel dreams into unforgettable experiences.
-            </p>
+          <h1>
+            Explore the world.
+            <br />
+            Plan the journey.
+          </h1>
 
-            <div className="hero__search">
-              <div className="hero__search-field">
-                <label htmlFor="destination-search">
-                  Where do you want to go?
-                </label>
+          <p>
+            Discover beautiful destinations, save your favorites, and create
+            trips you'll remember forever.
+          </p>
 
-                <input
-                  id="destination-search"
-                  type="text"
-                  placeholder="Search a destination..."
-                />
-              </div>
+          <div className="home-search">
+            <div className="home-search__input-wrapper">
+              <span className="home-search__icon">⌕</span>
 
-              <button type="button" className="hero__search-button">
-                Explore
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search destinations, countries, or categories..."
+                aria-label="Search destinations"
+              />
 
-      <section className="section">
-        <div className="container">
-          <div className="section__header">
-            <div>
-              <span className="section__eyebrow">DISCOVER</span>
-
-              <h2 className="section__title">Popular destinations</h2>
-
-              <p className="section__description">
-                Explore some of the world's most inspiring destinations.
-              </p>
+              {searchTerm && (
+                <button
+                  type="button"
+                  className="home-search__clear"
+                  onClick={() => setSearchTerm("")}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
             </div>
 
-            <button type="button" className="section__link">
-              View all destinations →
-            </button>
-          </div>
+            <Link to="/destinations" className="home-search__button">
+              Explore
+            </Link>
 
-          <div className="destination-grid">
-            {popularDestinations.map((destination) => (
-              <DestinationCard key={destination.id} destination={destination} />
-            ))}
-          </div>
-        </div>
-      </section>
+            {searchTerm && (
+              <div className="home-search__results">
+                {searchResults.length > 0 ? (
+                  searchResults.map((destination) => (
+                    <Link
+                      to={`/destinations/${destination.slug}`}
+                      className="home-search__result"
+                      key={destination.id}
+                      onClick={() => setSearchTerm("")}
+                    >
+                      <img src={destination.image} alt={destination.name} />
 
-      <section className="section section--featured">
-        <div className="container">
-          <div className="section__header">
-            <div>
-              <span className="section__eyebrow">PLAN YOUR JOURNEY</span>
+                      <div>
+                        <strong>{destination.name}</strong>
 
-              <h2 className="section__title">Featured trips</h2>
+                        <span>
+                          {destination.country} · {destination.category}
+                        </span>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="home-search__no-results">
+                    <strong>No destinations found</strong>
 
-              <p className="section__description">
-                Get inspired by carefully selected travel experiences.
-              </p>
-            </div>
-          </div>
-
-          <div className="trip-grid">
-            {featuredTrips.map((trip) => (
-              <article className="trip-card" key={trip.id}>
-                <div className="trip-card__image-wrapper">
-                  <img
-                    className="trip-card__image"
-                    src={trip.image}
-                    alt={trip.title}
-                  />
-                </div>
-
-                <div className="trip-card__content">
-                  <p className="trip-card__location">{trip.location}</p>
-
-                  <h3 className="trip-card__title">{trip.title}</h3>
-
-                  <p className="trip-card__description">{trip.description}</p>
-
-                  <div className="trip-card__footer">
-                    <span>{trip.duration}</span>
-
-                    <button type="button">View trip →</button>
+                    <span>
+                      Try searching for a different destination, country, or
+                      category.
+                    </span>
                   </div>
-                </div>
-              </article>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="section home-popular">
+        <div className="container">
+          <div className="section__header">
+            <div>
+              <span className="section__eyebrow">POPULAR DESTINATIONS</span>
+
+              <h2>Places travelers love</h2>
+
+              <p>
+                Explore some of the most popular destinations in the Triply
+                collection.
+              </p>
+            </div>
+
+            <Link to="/destinations" className="section__link">
+              View all destinations →
+            </Link>
+          </div>
+
+          <div className="destinations-grid">
+            {popularDestinations.slice(0, 6).map((destination) => (
+              <DestinationCard key={destination.id} destination={destination} />
             ))}
           </div>
         </div>
