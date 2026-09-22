@@ -1862,3 +1862,39 @@ img {
     justify-content: space-between;
   }
 }
+
+/* ========================================
+   MY TRIPS FINAL POLISH
+======================================== */
+
+.trip-create,
+.trip-card,
+.trips-empty {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trip-create:hover,
+.trip-card:hover {
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 640px) {
+  .trips-page__hero h1 {
+    font-size: 2.4rem;
+  }
+
+  .trips-page__hero p {
+    font-size: 1rem;
+  }
+
+  .trip-card__header h3 {
+    font-size: 1.2rem;
+  }
+
+  .trip-destination img {
+    width: 52px;
+    height: 52px;
+  }
+}
