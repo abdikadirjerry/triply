@@ -1,9 +1,23 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const FavoritesContext = createContext();
 
+const FAVORITES_STORAGE_KEY = "triply-favorites";
+
 export function FavoritesProvider({ children }) {
-  const [favoriteIds, setFavoriteIds] = useState([]);
+  const [favoriteIds, setFavoriteIds] = useState(() => {
+    try {
+      const savedFavorites = localStorage.getItem(FAVORITES_STORAGE_KEY);
+
+      return savedFavorites ? JSON.parse(savedFavorites) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteIds));
+  }, [favoriteIds]);
 
   const isFavorite = (destinationId) => {
     return favoriteIds.includes(destinationId);
