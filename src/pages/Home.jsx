@@ -132,6 +132,26 @@ function Home() {
             </Link>
           </div>
 
+          <div className="home-popular__stats">
+            <div className="home-popular__stat">
+              <strong>{popularDestinations.length}</strong>
+
+              <span>Popular destinations</span>
+            </div>
+
+            <div className="home-popular__stat">
+              <strong>{destinations.length}</strong>
+
+              <span>Destinations to explore</span>
+            </div>
+
+            <div className="home-popular__stat">
+              <strong>4.8</strong>
+
+              <span>Average traveler rating</span>
+            </div>
+          </div>
+
           <div className="destinations-grid">
             {popularDestinations.slice(0, 6).map((destination) => (
               <DestinationCard key={destination.id} destination={destination} />

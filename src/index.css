@@ -2067,3 +2067,49 @@ img {
     right: 0;
   }
 }
+
+/* ========================================
+   HOME POPULAR STATS
+======================================== */
+
+.home-popular__stats {
+  margin-bottom: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.home-popular__stat {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.home-popular__stat + .home-popular__stat {
+  border-left: 1px solid #e2e8f0;
+}
+
+.home-popular__stat strong {
+  color: #0f172a;
+  font-size: 1.6rem;
+}
+
+.home-popular__stat span {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .home-popular__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .home-popular__stat + .home-popular__stat {
+    border-top: 1px solid #e2e8f0;
+    border-left: none;
+  }
+}
