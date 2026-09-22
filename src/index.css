@@ -1167,3 +1167,63 @@ img {
     font-size: 1.3rem;
   }
 }
+
+/* ========================================
+   DESTINATION DETAIL FAVORITE
+======================================== */
+
+.destination-detail-hero__content {
+  position: relative;
+}
+
+.destination-detail-hero__favorite {
+  margin-top: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.destination-detail-hero__favorite:hover {
+  background: rgba(255, 255, 255, 0.24);
+  transform: translateY(-2px);
+}
+
+.destination-detail-hero__favorite span {
+  font-size: 1.25rem;
+}
+
+.destination-detail-hero__favorite--active {
+  background: rgba(239, 68, 68, 0.9);
+  border-color: rgba(239, 68, 68, 0.9);
+}
+
+.destination-detail-hero__favorite--active:hover {
+  background: rgba(220, 38, 38, 0.95);
+}
+
+.travel-info__button--active {
+  background: #ef4444;
+}
+
+.travel-info__button--active:hover {
+  background: #dc2626;
+}
+
+@media (max-width: 640px) {
+  .destination-detail-hero__favorite {
+    width: 100%;
+    justify-content: center;
+  }
+}

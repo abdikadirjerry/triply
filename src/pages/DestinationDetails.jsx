@@ -1,8 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import destinations from "../data/destinations";
+import { useFavorites } from "../context/FavoritesContext";
 
 function DestinationDetails() {
   const { slug } = useParams();
+
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const destination = destinations.find((item) => item.slug === slug);
 
@@ -23,6 +26,12 @@ function DestinationDetails() {
       </main>
     );
   }
+
+  const favorite = isFavorite(destination.id);
+
+  const handleFavoriteClick = () => {
+    toggleFavorite(destination.id);
+  };
 
   return (
     <main>
@@ -50,6 +59,18 @@ function DestinationDetails() {
                 {destination.country} · ★ {destination.rating}
               </p>
             </div>
+
+            <button
+              type="button"
+              className={`destination-detail-hero__favorite ${
+                favorite ? "destination-detail-hero__favorite--active" : ""
+              }`}
+              onClick={handleFavoriteClick}
+            >
+              <span>{favorite ? "♥" : "♡"}</span>
+
+              {favorite ? "Saved to favorites" : "Add to favorites"}
+            </button>
           </div>
         </div>
       </section>
@@ -75,6 +96,7 @@ function DestinationDetails() {
                   {destination.activities.map((activity) => (
                     <div className="detail-list__item" key={activity}>
                       <span className="detail-list__icon">✓</span>
+
                       <span>{activity}</span>
                     </div>
                   ))}
@@ -88,6 +110,7 @@ function DestinationDetails() {
                   {destination.places.map((place) => (
                     <div className="place-card" key={place}>
                       <span className="place-card__icon">📍</span>
+
                       <span>{place}</span>
                     </div>
                   ))}
@@ -128,8 +151,14 @@ function DestinationDetails() {
                 </div>
               </div>
 
-              <button type="button" className="travel-info__button">
-                Add to my trip
+              <button
+                type="button"
+                className={`travel-info__button ${
+                  favorite ? "travel-info__button--active" : ""
+                }`}
+                onClick={handleFavoriteClick}
+              >
+                {favorite ? "♥ Saved to favorites" : "♡ Add to favorites"}
               </button>
             </aside>
           </div>
