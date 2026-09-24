@@ -1,201 +1,268 @@
-import { Link, useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import DestinationCard from "../components/destinations/DestinationCard";
 import destinations from "../data/destinations";
-import { useFavorites } from "../context/useFavorites";
-import { useTrips } from "../context/useTrips";
+import "./Destinations.css";
 
-function DestinationDetails() {
-  const { slug } = useParams();
+function Destinations() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("popular");
 
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const { trips, addDestinationToTrip } = useTrips();
+  const countries = useMemo(() => {
+    return [
+      "All",
+      ...new Set(destinations.map((destination) => destination.country)),
+    ];
+  }, []);
 
-  const destination = destinations.find((item) => item.slug === slug);
+  const categories = useMemo(() => {
+    return [
+      "All",
+      ...new Set(destinations.map((destination) => destination.category)),
+    ];
+  }, []);
 
-  if (!destination) {
-    return (
-      <main className="destination-not-found">
-        <div className="container">
-          <div className="destination-not-found__content">
-            <span className="destination-not-found__icon">🌍</span>
+  const filteredDestinations = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
-            <h1>Destination not found</h1>
+    const filtered = destinations.filter((destination) => {
+      const matchesSearch =
+        normalizedSearch === "" ||
+        destination.name.toLowerCase().includes(normalizedSearch) ||
+        destination.country.toLowerCase().includes(normalizedSearch) ||
+        destination.category.toLowerCase().includes(normalizedSearch);
 
-            <p>We couldn't find the destination you're looking for.</p>
+      const matchesCountry =
+        selectedCountry === "All" || destination.country === selectedCountry;
 
-            <Link to="/destinations">Back to destinations</Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+      const matchesCategory =
+        selectedCategory === "All" || destination.category === selectedCategory;
 
-  const favorite = isFavorite(destination.id);
+      return matchesSearch && matchesCountry && matchesCategory;
+    });
 
-  const handleFavoriteClick = () => {
-    toggleFavorite(destination.id);
-  };
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "rating") {
+        return b.rating - a.rating;
+      }
 
-  const handleAddToTrip = (tripId) => {
-    addDestinationToTrip(tripId, destination.id);
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      }
+
+      if (sortBy === "newest") {
+        return b.id - a.id;
+      }
+
+      return Number(b.popular) - Number(a.popular);
+    });
+  }, [searchTerm, selectedCountry, selectedCategory, sortBy]);
+
+  const hasActiveFilters =
+    searchTerm.trim() !== "" ||
+    selectedCountry !== "All" ||
+    selectedCategory !== "All" ||
+    sortBy !== "popular";
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCountry("All");
+    setSelectedCategory("All");
+    setSortBy("popular");
   };
 
   return (
-    <main>
-      <section className="destination-detail-hero">
-        <img
-          className="destination-detail-hero__image"
-          src={destination.image}
-          alt={destination.name}
-        />
+    <main className="destinations-page">
+      <section className="destinations-hero">
+        <div className="container">
+          <div className="destinations-hero__content">
+            <span className="section__eyebrow">EXPLORE THE WORLD</span>
 
-        <div className="destination-detail-hero__overlay">
-          <div className="container destination-detail-hero__content">
-            <Link to="/destinations" className="destination-detail-hero__back">
-              ← Back to destinations
-            </Link>
+            <h1>Find your next destination</h1>
 
-            <div className="destination-detail-hero__info">
-              <span className="destination-detail-hero__category">
-                {destination.category}
-              </span>
-
-              <h1>{destination.name}</h1>
-
-              <p>
-                {destination.country} · ★ {destination.rating}
-              </p>
-            </div>
-
-            <button
-              type="button"
-              className={`destination-detail-hero__favorite ${
-                favorite ? "destination-detail-hero__favorite--active" : ""
-              }`}
-              onClick={handleFavoriteClick}
-            >
-              <span>{favorite ? "♥" : "♡"}</span>
-
-              {favorite ? "Saved to favorites" : "Add to favorites"}
-            </button>
+            <p>
+              Discover inspiring places, plan unforgettable journeys, and find
+              the destination that fits your travel style.
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="destination-detail-section">
+      <section className="destinations-section">
         <div className="container">
-          <div className="destination-detail-layout">
-            <div className="destination-detail-main">
-              <div className="destination-detail-intro">
-                <span className="section__eyebrow">
-                  DISCOVER {destination.name.toUpperCase()}
-                </span>
+          <div className="destinations-toolbar">
+            <div className="destinations-search">
+              <span className="destinations-search__icon" aria-hidden="true">
+                🔎
+              </span>
 
-                <h2>About {destination.name}</h2>
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search destinations..."
+                aria-label="Search destinations"
+              />
 
-                <p>{destination.description}</p>
-              </div>
+              {searchTerm && (
+                <button
+                  type="button"
+                  className="destinations-search__clear"
+                  onClick={() => setSearchTerm("")}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
 
-              <div className="destination-detail-content">
-                <h2>Things to do</h2>
+            <div className="destinations-sort">
+              <label htmlFor="destination-sort">Sort by</label>
 
-                <div className="detail-list">
-                  {destination.activities.map((activity) => (
-                    <div className="detail-list__item" key={activity}>
-                      <span className="detail-list__icon">✓</span>
+              <select
+                id="destination-sort"
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+              >
+                <option value="popular">Popular</option>
+                <option value="rating">Highest rated</option>
+                <option value="name">Name A–Z</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+          </div>
 
-                      <span>{activity}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          <div className="destinations-filters">
+            <div className="destinations-filter-group">
+              <span className="destinations-filter-group__label">Country</span>
 
-              <div className="destination-detail-content">
-                <h2>Places to visit</h2>
-
-                <div className="places-grid">
-                  {destination.places.map((place) => (
-                    <div className="place-card" key={place}>
-                      <span className="place-card__icon">📍</span>
-
-                      <span>{place}</span>
-                    </div>
-                  ))}
-                </div>
+              <div className="destinations-filter-options">
+                {countries.map((country) => (
+                  <button
+                    type="button"
+                    key={country}
+                    className={`destination-filter ${
+                      selectedCountry === country
+                        ? "destination-filter--active"
+                        : ""
+                    }`}
+                    onClick={() => setSelectedCountry(country)}
+                  >
+                    {country}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <aside className="travel-info">
-              <div className="travel-info__header">
-                <span className="section__eyebrow">TRAVEL GUIDE</span>
+            <div className="destinations-filter-group">
+              <span className="destinations-filter-group__label">Category</span>
 
-                <h2>Travel information</h2>
+              <div className="destinations-filter-options">
+                {categories.map((category) => (
+                  <button
+                    type="button"
+                    key={category}
+                    className={`destination-filter ${
+                      selectedCategory === category
+                        ? "destination-filter--active"
+                        : ""
+                    }`}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
-
-              <div className="travel-info__items">
-                <div className="travel-info__item">
-                  <span className="travel-info__label">Best time</span>
-
-                  <strong>{destination.bestTime}</strong>
-                </div>
-
-                <div className="travel-info__item">
-                  <span className="travel-info__label">Language</span>
-
-                  <strong>{destination.language}</strong>
-                </div>
-
-                <div className="travel-info__item">
-                  <span className="travel-info__label">Currency</span>
-
-                  <strong>{destination.currency}</strong>
-                </div>
-
-                <div className="travel-info__item">
-                  <span className="travel-info__label">Average budget</span>
-
-                  <strong>{destination.budget}</strong>
-                </div>
-              </div>
-
-              {trips.length > 0 ? (
-                <div className="trip-selector">
-                  <h3>Add to a trip</h3>
-
-                  <div className="trip-selector__list">
-                    {trips.map((trip) => {
-                      const alreadyAdded = trip.destinations.includes(
-                        destination.id,
-                      );
-
-                      return (
-                        <button
-                          type="button"
-                          className={`trip-selector__item ${
-                            alreadyAdded ? "trip-selector__item--added" : ""
-                          }`}
-                          key={trip.id}
-                          onClick={() => handleAddToTrip(trip.id)}
-                          disabled={alreadyAdded}
-                        >
-                          <span>{alreadyAdded ? "✓" : "+"}</span>
-
-                          <span>{trip.name}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : (
-                <Link to="/trips" className="travel-info__button">
-                  Create a trip first
-                </Link>
-              )}
-            </aside>
+            </div>
           </div>
+
+          <div className="destinations-results-header">
+            <div>
+              <p className="destinations-results-header__count">
+                {filteredDestinations.length}{" "}
+                {filteredDestinations.length === 1
+                  ? "destination"
+                  : "destinations"}
+              </p>
+
+              <p className="destinations-results-header__text">
+                {hasActiveFilters
+                  ? "Matching your current filters"
+                  : "Explore all destinations"}
+              </p>
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                className="destinations-clear"
+                onClick={clearFilters}
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
+
+          {hasActiveFilters && (
+            <div className="destinations-active-filters">
+              {searchTerm.trim() && (
+                <span className="active-filter">
+                  Search: "{searchTerm.trim()}"
+                </span>
+              )}
+
+              {selectedCountry !== "All" && (
+                <span className="active-filter">
+                  Country: {selectedCountry}
+                </span>
+              )}
+
+              {selectedCategory !== "All" && (
+                <span className="active-filter">
+                  Category: {selectedCategory}
+                </span>
+              )}
+
+              {sortBy !== "popular" && (
+                <span className="active-filter">
+                  Sorted by:{" "}
+                  {sortBy === "rating"
+                    ? "Highest rated"
+                    : sortBy === "name"
+                      ? "Name A–Z"
+                      : "Newest"}
+                </span>
+              )}
+            </div>
+          )}
+
+          {filteredDestinations.length > 0 ? (
+            <div className="destinations-grid">
+              {filteredDestinations.map((destination) => (
+                <DestinationCard
+                  key={destination.id}
+                  destination={destination}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="destinations-empty">
+              <span className="destinations-empty__icon">🌍</span>
+
+              <h2>No destinations found</h2>
+
+              <p>Try changing your search or removing one of your filters.</p>
+
+              <button type="button" onClick={clearFilters}>
+                Clear filters
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </main>
   );
 }
 
-export default DestinationDetails;
+export default Destinations;
