@@ -1,19 +1,54 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import "./Navbar.css";
 
 function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="navbar">
       <div className="container navbar__inner">
-        <NavLink to="/" className="navbar__logo">
+        <NavLink
+          to="/"
+          className="navbar__logo"
+          onClick={closeMenu}
+          aria-label="Triply home"
+        >
           Triply
         </NavLink>
 
-        <nav className="navbar__links" aria-label="Main navigation">
+        <button
+          type="button"
+          className={`navbar__toggle ${
+            isMenuOpen ? "navbar__toggle--open" : ""
+          }`}
+          onClick={() => setIsMenuOpen((current) => !current)}
+          aria-label={
+            isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
+          aria-expanded={isMenuOpen}
+          aria-controls="main-navigation"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <nav
+          id="main-navigation"
+          className={`navbar__nav ${isMenuOpen ? "navbar__nav--open" : ""}`}
+          aria-label="Main navigation"
+        >
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? "navbar__link navbar__link--active" : "navbar__link"
+              `navbar__link ${isActive ? "navbar__link--active" : ""}`
             }
+            onClick={closeMenu}
           >
             Home
           </NavLink>
@@ -21,8 +56,9 @@ function Navbar() {
           <NavLink
             to="/destinations"
             className={({ isActive }) =>
-              isActive ? "navbar__link navbar__link--active" : "navbar__link"
+              `navbar__link ${isActive ? "navbar__link--active" : ""}`
             }
+            onClick={closeMenu}
           >
             Destinations
           </NavLink>
@@ -30,8 +66,9 @@ function Navbar() {
           <NavLink
             to="/trips"
             className={({ isActive }) =>
-              isActive ? "navbar__link navbar__link--active" : "navbar__link"
+              `navbar__link ${isActive ? "navbar__link--active" : ""}`
             }
+            onClick={closeMenu}
           >
             My Trips
           </NavLink>
@@ -39,8 +76,9 @@ function Navbar() {
           <NavLink
             to="/favorites"
             className={({ isActive }) =>
-              isActive ? "navbar__link navbar__link--active" : "navbar__link"
+              `navbar__link ${isActive ? "navbar__link--active" : ""}`
             }
+            onClick={closeMenu}
           >
             Favorites
           </NavLink>
