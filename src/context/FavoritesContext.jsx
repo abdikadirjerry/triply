@@ -1,73 +1,67 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FavoritesContext } from "./FavoritesContext";
 
-const FavoritesContext = createContext();
+const STORAGE_KEY = "triply-favorites";
 
-const FAVORITES_STORAGE_KEY = "triply-favorites";
+function getInitialFavorites() {
+  try {
+    const storedFavorites = localStorage.getItem(STORAGE_KEY);
 
-export function FavoritesProvider({ children }) {
-  const [favoriteIds, setFavoriteIds] = useState(() => {
-    try {
-      const savedFavorites = localStorage.getItem(FAVORITES_STORAGE_KEY);
-
-      return savedFavorites ? JSON.parse(savedFavorites) : [];
-    } catch {
+    if (!storedFavorites) {
       return [];
     }
-  });
+
+    const parsedFavorites = JSON.parse(storedFavorites);
+
+    return Array.isArray(parsedFavorites) ? parsedFavorites : [];
+  } catch {
+    return [];
+  }
+}
+
+export function FavoritesProvider({ children }) {
+  const [favoriteIds, setFavoriteIds] = useState(getInitialFavorites);
 
   useEffect(() => {
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteIds));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favoriteIds));
   }, [favoriteIds]);
 
-  const isFavorite = (destinationId) => {
-    return favoriteIds.includes(destinationId);
-  };
-
-  const addFavorite = (destinationId) => {
-    setFavoriteIds((currentFavorites) => {
-      if (currentFavorites.includes(destinationId)) {
-        return currentFavorites;
+  const toggleFavorite = useCallback((destinationId) => {
+    setFavoriteIds((currentIds) => {
+      if (currentIds.includes(destinationId)) {
+        return currentIds.filter((id) => id !== destinationId);
       }
 
-      return [...currentFavorites, destinationId];
+      return [...currentIds, destinationId];
     });
-  };
+  }, []);
 
-  const removeFavorite = (destinationId) => {
-    setFavoriteIds((currentFavorites) =>
-      currentFavorites.filter((id) => id !== destinationId),
+  const isFavorite = useCallback(
+    (destinationId) => {
+      return favoriteIds.includes(destinationId);
+    },
+    [favoriteIds],
+  );
+
+  const removeFavorite = useCallback((destinationId) => {
+    setFavoriteIds((currentIds) =>
+      currentIds.filter((id) => id !== destinationId),
     );
-  };
+  }, []);
 
-  const toggleFavorite = (destinationId) => {
-    if (isFavorite(destinationId)) {
-      removeFavorite(destinationId);
-    } else {
-      addFavorite(destinationId);
-    }
-  };
-
-  const value = {
-    favoriteIds,
-    isFavorite,
-    addFavorite,
-    removeFavorite,
-    toggleFavorite,
-  };
+  const value = useMemo(
+    () => ({
+      favoriteIds,
+      toggleFavorite,
+      isFavorite,
+      removeFavorite,
+    }),
+    [favoriteIds, toggleFavorite, isFavorite, removeFavorite],
+  );
 
   return (
     <FavoritesContext.Provider value={value}>
       {children}
     </FavoritesContext.Provider>
   );
-}
-
-export function useFavorites() {
-  const context = useContext(FavoritesContext);
-
-  if (!context) {
-    throw new Error("useFavorites must be used inside a FavoritesProvider");
-  }
-
-  return context;
 }

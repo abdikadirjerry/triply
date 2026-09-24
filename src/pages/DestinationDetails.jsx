@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import destinations from "../data/destinations";
-import { useTrips } from "../context/TripsContext";
+import { useTrips } from "../context/useTrips";
 
 function DestinationDetails() {
   const { slug } = useParams();

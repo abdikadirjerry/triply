@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
-const TripsContext = createContext();
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { TripsContext } from "./TripsContext";
 
 const STORAGE_KEY = "triply-trips";
 
@@ -27,7 +26,7 @@ export function TripsProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
   }, [trips]);
 
-  const createTrip = (name) => {
+  const createTrip = useCallback((name) => {
     const trimmedName = name.trim();
 
     if (!trimmedName) {
@@ -44,9 +43,9 @@ export function TripsProvider({ children }) {
     setTrips((currentTrips) => [...currentTrips, newTrip]);
 
     return newTrip;
-  };
+  }, []);
 
-  const addDestinationToTrip = (tripId, destination) => {
+  const addDestinationToTrip = useCallback((tripId, destination) => {
     setTrips((currentTrips) =>
       currentTrips.map((trip) => {
         if (trip.id !== tripId) {
@@ -67,9 +66,9 @@ export function TripsProvider({ children }) {
         };
       }),
     );
-  };
+  }, []);
 
-  const removeDestinationFromTrip = (tripId, destinationId) => {
+  const removeDestinationFromTrip = useCallback((tripId, destinationId) => {
     setTrips((currentTrips) =>
       currentTrips.map((trip) => ({
         ...trip,
@@ -78,31 +77,39 @@ export function TripsProvider({ children }) {
         ),
       })),
     );
-  };
+  }, []);
 
-  const deleteTrip = (tripId) => {
+  const deleteTrip = useCallback((tripId) => {
     setTrips((currentTrips) =>
       currentTrips.filter((trip) => trip.id !== tripId),
     );
-  };
+  }, []);
 
-  const isDestinationInTrip = (tripId, destinationId) => {
-    const trip = trips.find((item) => item.id === tripId);
+  const isDestinationInTrip = useCallback(
+    (tripId, destinationId) => {
+      const trip = trips.find((item) => item.id === tripId);
 
-    if (!trip) {
-      return false;
-    }
+      if (!trip) {
+        return false;
+      }
 
-    return trip.destinations.some(
-      (destination) => destination.id === destinationId,
-    );
-  };
+      return trip.destinations.some(
+        (destination) => destination.id === destinationId,
+      );
+    },
+    [trips],
+  );
 
-  const getTripsContainingDestination = (destinationId) => {
-    return trips.filter((trip) =>
-      trip.destinations.some((destination) => destination.id === destinationId),
-    );
-  };
+  const getTripsContainingDestination = useCallback(
+    (destinationId) => {
+      return trips.filter((trip) =>
+        trip.destinations.some(
+          (destination) => destination.id === destinationId,
+        ),
+      );
+    },
+    [trips],
+  );
 
   const value = useMemo(
     () => ({
@@ -114,20 +121,18 @@ export function TripsProvider({ children }) {
       isDestinationInTrip,
       getTripsContainingDestination,
     }),
-    [trips],
+    [
+      trips,
+      createTrip,
+      addDestinationToTrip,
+      removeDestinationFromTrip,
+      deleteTrip,
+      isDestinationInTrip,
+      getTripsContainingDestination,
+    ],
   );
 
   return (
     <TripsContext.Provider value={value}>{children}</TripsContext.Provider>
   );
-}
-
-export function useTrips() {
-  const context = useContext(TripsContext);
-
-  if (!context) {
-    throw new Error("useTrips must be used inside TripsProvider");
-  }
-
-  return context;
 }
