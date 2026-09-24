@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../context/useFavorites";
+import "./DestinationCard.css";
 
 function DestinationCard({ destination }) {
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -15,59 +16,66 @@ function DestinationCard({ destination }) {
 
   return (
     <article className="destination-card">
-      <div className="destination-card__image-wrapper">
-        <Link to={`/destinations/${destination.slug}`}>
+      <Link
+        to={`/destinations/${destination.slug}`}
+        className="destination-card__link"
+        aria-label={`View ${destination.name} destination`}
+      >
+        <div className="destination-card__image-wrapper">
           <img
-            className="destination-card__image"
             src={destination.image}
-            alt={destination.name}
+            alt={`${destination.name}, ${destination.country}`}
+            className="destination-card__image"
           />
-        </Link>
 
-        <span className="destination-card__category">
-          {destination.category}
-        </span>
+          <button
+            type="button"
+            className={`destination-card__favorite ${
+              favorite ? "destination-card__favorite--active" : ""
+            }`}
+            onClick={handleFavoriteClick}
+            aria-label={
+              favorite
+                ? `Remove ${destination.name} from favorites`
+                : `Add ${destination.name} to favorites`
+            }
+            aria-pressed={favorite}
+          >
+            {favorite ? "♥" : "♡"}
+          </button>
 
-        <button
-          type="button"
-          className={`destination-card__favorite ${
-            favorite ? "destination-card__favorite--active" : ""
-          }`}
-          onClick={handleFavoriteClick}
-          aria-label={
-            favorite
-              ? `Remove ${destination.name} from favorites`
-              : `Add ${destination.name} to favorites`
-          }
-        >
-          {favorite ? "♥" : "♡"}
-        </button>
-      </div>
-
-      <div className="destination-card__content">
-        <div className="destination-card__heading">
-          <div>
-            <h3 className="destination-card__name">{destination.name}</h3>
-
-            <p className="destination-card__country">{destination.country}</p>
-          </div>
-
-          <span className="destination-card__rating">
-            ★ {destination.rating}
-          </span>
+          {destination.popular && (
+            <span className="destination-card__badge">Popular</span>
+          )}
         </div>
 
-        <p className="destination-card__description">
-          {destination.description}
-        </p>
+        <div className="destination-card__content">
+          <div className="destination-card__top">
+            <div>
+              <p className="destination-card__country">{destination.country}</p>
 
-        <Link
-          to={`/destinations/${destination.slug}`}
-          className="destination-card__link"
-        >
-          Explore destination →
-        </Link>
-      </div>
+              <h3>{destination.name}</h3>
+            </div>
+
+            <span
+              className="destination-card__rating"
+              aria-label={`Rating ${destination.rating} out of 5`}
+            >
+              ★ {destination.rating}
+            </span>
+          </div>
+
+          <p className="destination-card__description">
+            {destination.description}
+          </p>
+
+          <div className="destination-card__footer">
+            <span>{destination.category}</span>
+
+            <span className="destination-card__view">View destination →</span>
+          </div>
+        </div>
+      </Link>
     </article>
   );
 }
