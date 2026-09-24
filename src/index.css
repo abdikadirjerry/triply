@@ -2410,3 +2410,238 @@ img {
     min-height: 52px;
   }
 }
+
+/* ========================================
+   TRIP PLANNER
+======================================== */
+
+.travel-info__saved {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid #d7eadf;
+  border-radius: 14px;
+  background: #f3faf6;
+}
+
+.travel-info__saved > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #d7f0e1;
+  color: #16794b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.travel-info__saved strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #17352a;
+  font-size: 14px;
+}
+
+.travel-info__saved p {
+  margin: 0;
+  color: #66756e;
+  font-size: 13px;
+}
+
+.trip-planner {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid #e5e9e7;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 35px rgba(24, 44, 35, 0.08);
+}
+
+.trip-planner__header {
+  margin-bottom: 20px;
+}
+
+.trip-planner__header h3 {
+  margin: 6px 0 6px;
+  color: #17352a;
+  font-size: 21px;
+}
+
+.trip-planner__header p {
+  margin: 0;
+  color: #718078;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.trip-planner__existing {
+  margin-bottom: 22px;
+}
+
+.trip-planner__existing h4,
+.trip-planner__create h4 {
+  margin: 0 0 10px;
+  color: #263b33;
+  font-size: 14px;
+}
+
+.trip-planner__list {
+  display: grid;
+  gap: 8px;
+}
+
+.trip-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e4e9e6;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #263b33;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.trip-option:hover:not(:disabled) {
+  border-color: #b9d6c6;
+  background: #f7fbf9;
+  transform: translateY(-1px);
+}
+
+.trip-option:disabled {
+  cursor: default;
+  opacity: 0.8;
+}
+
+.trip-option__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: #eef6f1;
+  font-size: 16px;
+}
+
+.trip-option__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.trip-option__content strong {
+  overflow: hidden;
+  color: #263b33;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trip-option__content small {
+  color: #87928d;
+  font-size: 11px;
+}
+
+.trip-option__action {
+  margin-left: 8px;
+  color: #18784b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.trip-option:disabled .trip-option__action {
+  color: #87928d;
+}
+
+.trip-planner__create {
+  padding-top: 18px;
+  border-top: 1px solid #edf0ee;
+}
+
+.trip-planner__create form {
+  display: flex;
+  gap: 8px;
+}
+
+.trip-planner__create input {
+  min-width: 0;
+  flex: 1;
+  padding: 11px 12px;
+  border: 1px solid #dfe5e2;
+  border-radius: 10px;
+  outline: none;
+  color: #263b33;
+  font-family: inherit;
+  font-size: 13px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trip-planner__create input:focus {
+  border-color: #6aa889;
+  box-shadow: 0 0 0 3px rgba(106, 168, 137, 0.12);
+}
+
+.trip-planner__create button {
+  flex-shrink: 0;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #17352a;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.trip-planner__create button:hover {
+  background: #23513e;
+  transform: translateY(-1px);
+}
+
+.trip-planner__link {
+  display: block;
+  margin-top: 18px;
+  color: #18784b;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.trip-planner__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .trip-planner {
+    padding: 16px;
+  }
+
+  .trip-planner__create form {
+    flex-direction: column;
+  }
+
+  .trip-planner__create button {
+    width: 100%;
+  }
+}
