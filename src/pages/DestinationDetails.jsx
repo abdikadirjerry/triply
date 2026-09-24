@@ -1,13 +1,22 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import destinations from "../data/destinations";
-import { useFavorites } from "../context/FavoritesContext";
+import { useTrips } from "../context/TripsContext";
 
 function DestinationDetails() {
   const { slug } = useParams();
 
-  const { isFavorite, toggleFavorite } = useFavorites();
-
   const destination = destinations.find((item) => item.slug === slug);
+
+  const {
+    trips,
+    createTrip,
+    addDestinationToTrip,
+    getTripsContainingDestination,
+  } = useTrips();
+
+  const [showTripPanel, setShowTripPanel] = useState(false);
+  const [newTripName, setNewTripName] = useState("");
 
   if (!destination) {
     return (
@@ -27,10 +36,26 @@ function DestinationDetails() {
     );
   }
 
-  const favorite = isFavorite(destination.id);
+  const destinationTrips = getTripsContainingDestination(destination.id);
 
-  const handleFavoriteClick = () => {
-    toggleFavorite(destination.id);
+  const handleAddToTrip = (tripId) => {
+    addDestinationToTrip(tripId, destination);
+    setShowTripPanel(false);
+  };
+
+  const handleCreateTrip = (event) => {
+    event.preventDefault();
+
+    const trip = createTrip(newTripName);
+
+    if (!trip) {
+      return;
+    }
+
+    addDestinationToTrip(trip.id, destination);
+
+    setNewTripName("");
+    setShowTripPanel(false);
   };
 
   return (
@@ -59,18 +84,6 @@ function DestinationDetails() {
                 {destination.country} · ★ {destination.rating}
               </p>
             </div>
-
-            <button
-              type="button"
-              className={`destination-detail-hero__favorite ${
-                favorite ? "destination-detail-hero__favorite--active" : ""
-              }`}
-              onClick={handleFavoriteClick}
-            >
-              <span>{favorite ? "♥" : "♡"}</span>
-
-              {favorite ? "Saved to favorites" : "Add to favorites"}
-            </button>
           </div>
         </div>
       </section>
@@ -96,7 +109,6 @@ function DestinationDetails() {
                   {destination.activities.map((activity) => (
                     <div className="detail-list__item" key={activity}>
                       <span className="detail-list__icon">✓</span>
-
                       <span>{activity}</span>
                     </div>
                   ))}
@@ -110,7 +122,6 @@ function DestinationDetails() {
                   {destination.places.map((place) => (
                     <div className="place-card" key={place}>
                       <span className="place-card__icon">📍</span>
-
                       <span>{place}</span>
                     </div>
                   ))}
@@ -151,15 +162,102 @@ function DestinationDetails() {
                 </div>
               </div>
 
+              {destinationTrips.length > 0 && (
+                <div className="travel-info__saved">
+                  <span>✓</span>
+
+                  <div>
+                    <strong>Added to your trips</strong>
+
+                    <p>
+                      {destinationTrips.length === 1
+                        ? destinationTrips[0].name
+                        : `${destinationTrips.length} trips`}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <button
                 type="button"
-                className={`travel-info__button ${
-                  favorite ? "travel-info__button--active" : ""
-                }`}
-                onClick={handleFavoriteClick}
+                className="travel-info__button"
+                onClick={() => setShowTripPanel((current) => !current)}
               >
-                {favorite ? "♥ Saved to favorites" : "♡ Add to favorites"}
+                {showTripPanel ? "Close trip planner" : "Add to my trip"}
               </button>
+
+              {showTripPanel && (
+                <div className="trip-planner">
+                  <div className="trip-planner__header">
+                    <span className="section__eyebrow">PLAN YOUR JOURNEY</span>
+
+                    <h3>Add {destination.name}</h3>
+
+                    <p>Choose an existing trip or create a new one.</p>
+                  </div>
+
+                  {trips.length > 0 && (
+                    <div className="trip-planner__existing">
+                      <h4>Your trips</h4>
+
+                      <div className="trip-planner__list">
+                        {trips.map((trip) => {
+                          const alreadyAdded = destinationTrips.some(
+                            (item) => item.id === trip.id,
+                          );
+
+                          return (
+                            <button
+                              type="button"
+                              className="trip-option"
+                              key={trip.id}
+                              disabled={alreadyAdded}
+                              onClick={() => handleAddToTrip(trip.id)}
+                            >
+                              <span className="trip-option__icon">🧳</span>
+
+                              <span className="trip-option__content">
+                                <strong>{trip.name}</strong>
+
+                                <small>
+                                  {trip.destinations.length}{" "}
+                                  {trip.destinations.length === 1
+                                    ? "destination"
+                                    : "destinations"}
+                                </small>
+                              </span>
+
+                              <span className="trip-option__action">
+                                {alreadyAdded ? "Added" : "Add"}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="trip-planner__create">
+                    <h4>Create a new trip</h4>
+
+                    <form onSubmit={handleCreateTrip}>
+                      <input
+                        type="text"
+                        value={newTripName}
+                        onChange={(event) => setNewTripName(event.target.value)}
+                        placeholder="e.g. Summer in Europe"
+                        aria-label="New trip name"
+                      />
+
+                      <button type="submit">Create trip</button>
+                    </form>
+                  </div>
+
+                  <Link to="/trips" className="trip-planner__link">
+                    View all my trips →
+                  </Link>
+                </div>
+              )}
             </aside>
           </div>
         </div>
