@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import destinations from "../data/destinations";
 import DestinationCard from "../components/destinations/DestinationCard";
-import { useTrips } from "../context/TripsContext";
-import { useFavorites } from "../context/FavoritesContext";
+import { useTrips } from "../context/useTrips";
+import { useFavorites } from "../context/useFavorites";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState("");

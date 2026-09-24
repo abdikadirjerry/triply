@@ -6,8 +6,8 @@ import Destinations from "./pages/Destinations";
 import MyTrips from "./pages/MyTrips";
 import Favorites from "./pages/Favorites";
 import DestinationDetails from "./pages/DestinationDetails";
-import { FavoritesProvider } from "./context/FavoritesContext";
 import { TripsProvider } from "./context/TripsContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 function App() {
   return (

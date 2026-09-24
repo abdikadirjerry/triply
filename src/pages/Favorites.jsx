@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import DestinationCard from "../components/destinations/DestinationCard";
 import destinations from "../data/destinations";
-import { useFavorites } from "../context/FavoritesContext";
+import { useFavorites } from "../context/useFavorites";
 
 function Favorites() {
   const { favoriteIds } = useFavorites();

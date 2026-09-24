@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import destinations from "../data/destinations";
-import { useFavorites } from "../context/FavoritesContext";
-import { useTrips } from "../context/TripsContext";
+import { useFavorites } from "../context/useFavorites";
+import { useTrips } from "../context/useTrips";
 
 function DestinationDetails() {
   const { slug } = useParams();

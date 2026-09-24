@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useTrips } from "../context/TripsContext";
+import { useTrips } from "../context/useTrips";
 import destinations from "../data/destinations";
 
 function MyTrips() {
