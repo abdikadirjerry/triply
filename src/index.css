@@ -2726,3 +2726,183 @@ textarea:focus:not(:focus-visible) {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ========================================
+   Final UI Polish
+======================================== */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+a {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+button {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input,
+select,
+textarea {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+/* ========================================
+   Better Empty States
+======================================== */
+
+.trips-empty,
+.trip-card__empty {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.trips-empty {
+  text-align: center;
+}
+
+.trips-empty__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #eff6ff;
+  font-size: 2rem;
+}
+
+.trip-card__empty {
+  padding: 32px 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.trip-card__empty span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.trip-card__empty p {
+  margin: 0 0 12px;
+  color: #6b7280;
+}
+
+/* ========================================
+   Mobile Polish
+======================================== */
+
+@media (max-width: 768px) {
+  .trip-create {
+    padding: 24px;
+  }
+
+  .trip-create__form {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-create__button {
+    width: 100%;
+  }
+
+  .trips-list__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .trip-card__header {
+    gap: 16px;
+  }
+
+  .trip-card__actions {
+    align-items: flex-end;
+  }
+
+  .trip-destination {
+    grid-template-columns: 56px 1fr auto;
+    gap: 12px;
+  }
+
+  .trip-destination img {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trip-create {
+    padding: 20px;
+  }
+
+  .trip-card {
+    padding: 20px;
+  }
+
+  .trip-card__header {
+    flex-direction: column;
+  }
+
+  .trip-card__actions {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  .trip-destination {
+    grid-template-columns: 48px 1fr auto;
+  }
+
+  .trip-destination img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .trip-destination__info h4 {
+    font-size: 0.95rem;
+  }
+
+  .trip-destination__info p {
+    font-size: 0.8rem;
+  }
+}
