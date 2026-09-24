@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../context/useFavorites";
-import "./DestinationCard.css";
+// import "./DestinationCard.css";
 
 function DestinationCard({ destination }) {
   const { isFavorite, toggleFavorite } = useFavorites();

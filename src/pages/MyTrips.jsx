@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTrips } from "../context/useTrips";
-import destinations from "../data/destinations";
 
 function MyTrips() {
-  const { trips, addTrip, deleteTrip, removeDestinationFromTrip } = useTrips();
+  const { trips, createTrip, deleteTrip, removeDestinationFromTrip } =
+    useTrips();
 
   const [tripName, setTripName] = useState("");
   const [tripDate, setTripDate] = useState("");
@@ -18,16 +18,21 @@ function MyTrips() {
       return;
     }
 
-    addTrip({
-      name: trimmedName,
-      date: tripDate,
-    });
+    const newTrip = createTrip(trimmedName);
+
+    if (!newTrip) {
+      return;
+    }
 
     setTripName("");
     setTripDate("");
   };
 
   const formatDate = (date) => {
+    if (!date) {
+      return "No date selected";
+    }
+
     return new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
@@ -74,6 +79,8 @@ function MyTrips() {
                   value={tripName}
                   onChange={(event) => setTripName(event.target.value)}
                   placeholder="e.g. Summer in Europe"
+                  maxLength={80}
+                  required
                 />
               </div>
 
@@ -85,6 +92,7 @@ function MyTrips() {
                   type="date"
                   value={tripDate}
                   onChange={(event) => setTripDate(event.target.value)}
+                  required
                 />
               </div>
 
@@ -111,91 +119,87 @@ function MyTrips() {
               </div>
 
               <div className="trip-cards">
-                {trips.map((trip) => {
-                  const tripDestinations = destinations.filter((destination) =>
-                    trip.destinations.includes(destination.id),
-                  );
+                {trips.map((trip) => (
+                  <article className="trip-card" key={trip.id}>
+                    <div className="trip-card__header">
+                      <div>
+                        <span className="trip-card__label">TRIP</span>
 
-                  return (
-                    <article className="trip-card" key={trip.id}>
-                      <div className="trip-card__header">
-                        <div>
-                          <span className="trip-card__label">TRIP</span>
+                        <h3>{trip.name}</h3>
 
-                          <h3>{trip.name}</h3>
-
-                          <p>📅 {formatDate(trip.date)}</p>
-                        </div>
-
-                        <div className="trip-card__actions">
-                          <span className="trip-card__count">
-                            {tripDestinations.length}{" "}
-                            {tripDestinations.length === 1 ? "place" : "places"}
-                          </span>
-
-                          <button
-                            type="button"
-                            className="trip-card__delete"
-                            onClick={() => deleteTrip(trip.id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        <p>📅 {formatDate(trip.date)}</p>
                       </div>
 
-                      {tripDestinations.length > 0 ? (
-                        <div className="trip-card__destinations">
-                          {tripDestinations.map((destination) => (
-                            <div
-                              className="trip-destination"
-                              key={destination.id}
-                            >
-                              <img
-                                src={destination.image}
-                                alt={destination.name}
-                              />
+                      <div className="trip-card__actions">
+                        <span className="trip-card__count">
+                          {trip.destinations.length}{" "}
+                          {trip.destinations.length === 1 ? "place" : "places"}
+                        </span>
 
-                              <div className="trip-destination__info">
-                                <h4>{destination.name}</h4>
+                        <button
+                          type="button"
+                          className="trip-card__delete"
+                          onClick={() => deleteTrip(trip.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
 
-                                <p>{destination.country}</p>
-                              </div>
+                    {trip.destinations.length > 0 ? (
+                      <div className="trip-card__destinations">
+                        {trip.destinations.map((destination) => (
+                          <div
+                            className="trip-destination"
+                            key={destination.id}
+                          >
+                            <img
+                              src={destination.image}
+                              alt={`${destination.name}, ${destination.country}`}
+                            />
 
-                              <button
-                                type="button"
-                                className="trip-destination__remove"
-                                onClick={() =>
-                                  removeDestinationFromTrip(
-                                    trip.id,
-                                    destination.id,
-                                  )
-                                }
-                                aria-label={`Remove ${destination.name} from ${trip.name}`}
-                              >
-                                ×
-                              </button>
+                            <div className="trip-destination__info">
+                              <h4>{destination.name}</h4>
+
+                              <p>{destination.country}</p>
                             </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="trip-card__empty">
-                          <span>🌍</span>
 
-                          <p>No destinations added yet.</p>
+                            <button
+                              type="button"
+                              className="trip-destination__remove"
+                              onClick={() =>
+                                removeDestinationFromTrip(
+                                  trip.id,
+                                  destination.id,
+                                )
+                              }
+                              aria-label={`Remove ${destination.name} from ${trip.name}`}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="trip-card__empty">
+                        <span aria-hidden="true">🌍</span>
 
-                          <Link to="/destinations">Add destinations →</Link>
-                        </div>
-                      )}
-                    </article>
-                  );
-                })}
+                        <p>No destinations added yet.</p>
+
+                        <Link to="/destinations">Add destinations →</Link>
+                      </div>
+                    )}
+                  </article>
+                ))}
               </div>
             </div>
           )}
 
           {trips.length === 0 && (
             <div className="trips-empty">
-              <div className="trips-empty__icon">🧳</div>
+              <div className="trips-empty__icon" aria-hidden="true">
+                🧳
+              </div>
 
               <span className="section__eyebrow">NO TRIPS YET</span>
 
