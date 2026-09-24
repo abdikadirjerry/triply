@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DestinationCard from "../components/destinations/DestinationCard";
 import destinations from "../data/destinations";
 import "./Destinations.css";
@@ -8,6 +8,10 @@ function Destinations() {
   const [selectedCountry, setSelectedCountry] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("popular");
+
+  useEffect(() => {
+    document.title = "Destinations | Triply";
+  }, []);
 
   const countries = useMemo(() => {
     return [
